@@ -14,6 +14,7 @@
 		439E114725FD4BB3008B5ED6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 439E114525FD4BB3008B5ED6 /* LaunchScreen.storyboard */; };
 		439E115225FD4BB3008B5ED6 /* SimpleReminderNotificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E115125FD4BB3008B5ED6 /* SimpleReminderNotificationTests.swift */; };
 		439E115D25FD4BB3008B5ED6 /* SimpleReminderNotificationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439E115C25FD4BB3008B5ED6 /* SimpleReminderNotificationUITests.swift */; };
+		43D5001525FE816F00D2E894 /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D5001425FE816F00D2E894 /* LocalNotificationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		439E115825FD4BB3008B5ED6 /* SimpleReminderNotificationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleReminderNotificationUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		439E115C25FD4BB3008B5ED6 /* SimpleReminderNotificationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReminderNotificationUITests.swift; sourceTree = "<group>"; };
 		439E115E25FD4BB3008B5ED6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43D5001425FE816F00D2E894 /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				439E114325FD4BB3008B5ED6 /* Assets.xcassets */,
 				439E114525FD4BB3008B5ED6 /* LaunchScreen.storyboard */,
 				439E114825FD4BB3008B5ED6 /* Info.plist */,
+				43D5001425FE816F00D2E894 /* LocalNotificationManager.swift */,
 			);
 			path = SimpleReminderNotification;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			files = (
 				439E113F25FD4BAF008B5ED6 /* ReminderViewController.swift in Sources */,
 				439E113B25FD4BAF008B5ED6 /* AppDelegate.swift in Sources */,
+				43D5001525FE816F00D2E894 /* LocalNotificationManager.swift in Sources */,
 				439E113D25FD4BAF008B5ED6 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
