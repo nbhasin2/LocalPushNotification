@@ -11,7 +11,10 @@ import UserNotifications
 
 class ReminderViewController: UIViewController {
     
-    let notificationId: String = "3e2995cc-65a9-4224-b41f-be63e9c327cc" // randomly generated uuid
+    // randomly generated uuid
+    // In order to keep track of multiple notifications we can generate
+    // more uuids but for this particular one app we'll just use this
+    let notificationId: String = "3e2995cc-65a9-4224-b41f-be63e9c327cc"
     var shouldSendToSettings: Bool = false
     var date: Date? = nil
     var notificationTitle: String {
@@ -83,13 +86,8 @@ class ReminderViewController: UIViewController {
         picker.preferredDatePickerStyle = .compact
         picker.datePickerMode = .dateAndTime
         picker.addTarget(self, action: #selector(dueDateChanged(sender:)), for: .allEditingEvents)
-//        let pickerSize : CGSize = picker.sizeThatFits(CGSize.zero)
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
-        // picker.frame = CGRect(x:0.0, y:250, width:pickerSize.width, height:pickerSize.height)
-        // you probably don't want to set background color as black
-        // picker.backgroundColor = .white
-        // self.view.addSubview(picker)
     }()
     
     lazy var rightAddNavButton: UIBarButtonItem = {
@@ -150,24 +148,13 @@ class ReminderViewController: UIViewController {
         containerView.addSubview(reminderDateTimeLabel)
         containerView.addSubview(datePicker)
         view.addSubview(registerNotificationButton)
-
-//        view.addSubview(reminderTitleLabel)
-//        view.addSubview(titleTextView)
-//        view.addSubview(reminderDescriptionLabel)
-//        view.addSubview(descriptionTextView)
-//        view.addSubview(reminderDateTimeLabel)
-//        view.addSubview(datePicker)
-//        view.addSubview(registerNotificationButton)
         
         checkIfRegistered()
-//        registerNotificationButton.isHidden = false
-//        containerView.isHidden = true
         
         // Constraints
         let pickerSize : CGSize = datePicker.sizeThatFits(CGSize.zero)
         NSLayoutConstraint.activate([
             registerNotificationButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-//            registerNotificationButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             registerNotificationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
             registerNotificationButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
             registerNotificationButton.heightAnchor.constraint(equalToConstant: 40),
@@ -206,37 +193,6 @@ class ReminderViewController: UIViewController {
             reminderDateTimeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
             reminderDateTimeLabel.trailingAnchor.constraint(equalTo: datePicker.trailingAnchor, constant: 0),
             reminderDateTimeLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-            
-            
-//            reminderTitleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15),
-//            reminderTitleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-//            reminderTitleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-//            reminderTitleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-//
-//            titleTextView.topAnchor.constraint(equalTo: reminderTitleLabel.bottomAnchor, constant: 5),
-//            titleTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-//            titleTextView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-//            titleTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 35),
-//
-//            reminderDescriptionLabel.topAnchor.constraint(equalTo: titleTextView.bottomAnchor, constant: 15),
-//            reminderDescriptionLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-//            reminderDescriptionLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 10),
-//            reminderDescriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
-//
-//            descriptionTextView.topAnchor.constraint(equalTo: reminderDescriptionLabel.bottomAnchor, constant: 5),
-//            descriptionTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-//            descriptionTextView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-//            descriptionTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 35),
-//
-//            datePicker.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 15),
-//            datePicker.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-//            descriptionTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: pickerSize.height),
-//            descriptionTextView.widthAnchor.constraint(greaterThanOrEqualToConstant: pickerSize.width),
-//
-//            reminderDateTimeLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 15),
-//            reminderDateTimeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-//            reminderDateTimeLabel.trailingAnchor.constraint(equalTo: datePicker.trailingAnchor, constant: 0),
-//            reminderDateTimeLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
         ])
     }
     
@@ -316,9 +272,9 @@ class ReminderViewController: UIViewController {
                 return
             }
             if granted {
-                print("Yay!")
+                print("Authorization granted!!")
             } else {
-                print("D'oh")
+                print("Authorization denied!!")
             }
             self.checkIfRegistered()
         }
@@ -330,22 +286,11 @@ class ReminderViewController: UIViewController {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-//        content.categoryIdentifier = "alarm"
-//        content.userInfo = ["customData": "fizzbuzz"]
         content.sound = UNNotificationSound.default
         
-
         let units: Set<Calendar.Component> = [.minute, .hour, .day, .month, .year]
         let dateComponents = Calendar.current.dateComponents(units, from: date)
-
-//        var dateComponents = Cale
-//        dateComponents.hour = hour
-//        dateComponents.minute = minute
-        
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
-
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         center.add(request)
     }
