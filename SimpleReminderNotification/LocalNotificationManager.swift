@@ -78,6 +78,10 @@ class LocalNotificationManager {
     func removeAllPendingNotifications() {
         center.removeAllPendingNotificationRequests()
     }
+
+    func removePendingNotificationsWithId(ids: [String]) {
+        center.removePendingNotificationRequests(withIdentifiers: ids)
+    }
     
     func removeNotificationsWithId(ids: [String]) {
         center.removeDeliveredNotifications(withIdentifiers: ids)

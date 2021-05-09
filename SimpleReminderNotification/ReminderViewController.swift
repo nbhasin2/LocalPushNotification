@@ -286,7 +286,7 @@ class ReminderViewController: UIViewController {
     
     //MARK: Navigation button actions
     @objc private func rightNavButtonAction() {
-        let alert = UIAlertController(title: "Navigation Alert", message: "Save push notification", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Reminder confirmation", message: "Save push notification", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Save", style: .cancel, handler: {
             action in
             guard let date = self.date else {
