@@ -13,6 +13,7 @@ enum NotificationPermission {
     case denied
     case unknown
     case notAsked
+    case appClips
 }
 
 class LocalNotificationManager {
@@ -23,22 +24,19 @@ class LocalNotificationManager {
         center.getNotificationSettings { permission in
             switch permission.authorizationStatus {
             case .authorized:
-                print("Authorized")
                 completion(.authorized)
             case .denied:
-                print("Denied")
                 completion(.denied)
             case .ephemeral:
-                print("Temporary notification for App Clips")
-                completion(.unknown)
+                //Temporary notification for App Clips
+                completion(.appClips)
             case .notDetermined:
-                print("No permission asked")
                 completion(.notAsked)
             case .provisional:
-                print("Authorized to post non-interruptive notification ")
+                //Authorized to post non-interruptive notification
                 completion(.authorized)
             default:
-                print("unknown")
+                //Unknown
                 completion(.unknown)
             }
         }

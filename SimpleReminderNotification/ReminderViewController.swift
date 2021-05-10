@@ -116,7 +116,7 @@ class ReminderViewController: UIViewController {
         return view
     }()
     
-    // Managers
+    // Manager
     var localNotificationManager = LocalNotificationManager()
     
     // MARK: Lifecycle
@@ -234,7 +234,7 @@ class ReminderViewController: UIViewController {
                 case .notAsked:
                     self.registerNotificationButton.isHidden = false
                     self.containerView.isHidden = true
-                case .unknown:
+                default:
                     self.registerNotificationButton.isHidden = false
                     self.containerView.isHidden = true
                     self.shouldSendToSettings = true
