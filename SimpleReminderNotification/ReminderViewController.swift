@@ -11,7 +11,7 @@ import UserNotifications
 
 class ReminderViewController: UIViewController {
     
-    // randomly generated uuid
+    // Randomly generated uuid as notificationId:
     // In order to keep track of multiple notifications we can generate
     // more uuids but for this particular one app we'll just use this
     let notificationId: String = "3e2995cc-65a9-4224-b41f-be63e9c327cc"
@@ -23,7 +23,6 @@ class ReminderViewController: UIViewController {
     var notificationBody: String {
         return descriptionTextView.text
     }
-    
     var reminderTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Title"
@@ -105,22 +104,24 @@ class ReminderViewController: UIViewController {
         button.setTitleColor(UIColor.white, for: .normal)
         button.layer.cornerRadius = 10
         button.backgroundColor = .systemBlue
-        button.addTarget(self, action: #selector(registerLocal), for: .touchUpInside)
+        button.addTarget(self, action: #selector(registerLocalNotification), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    private lazy var containerView: UIView = {
+    private lazy var
+        containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-        
-    // MARK: Lifecycle
     
+    // Managers
+    var localNotificationManager = LocalNotificationManager()
+    
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setup()
     }
     
@@ -196,42 +197,6 @@ class ReminderViewController: UIViewController {
         ])
     }
     
-    func checkIfRegistered() {
-        let current = UNUserNotificationCenter.current()
-        current.getNotificationSettings(completionHandler: { permission in
-            DispatchQueue.main.async {
-                switch permission.authorizationStatus {
-                case .authorized:
-                    print("Authorized")
-                    self.registerNotificationButton.isHidden = true
-                    self.containerView.isHidden = false
-                case .denied:
-                    print("Denied")
-                    self.registerNotificationButton.isHidden = false
-                    self.containerView.isHidden = true
-                    self.shouldSendToSettings = true
-                case .ephemeral:
-                    print("Temporary notification for App Clips")
-                    self.registerNotificationButton.isHidden = true
-                    self.containerView.isHidden = false
-                case .notDetermined:
-                    self.registerNotificationButton.isHidden = false
-                    self.containerView.isHidden = true
-                    print("No permission asked")
-                case .provisional:
-                    self.registerNotificationButton.isHidden = true
-                    self.containerView.isHidden = false
-                    print("Authorized to post non-interruptive notification ")
-                default:
-                    self.registerNotificationButton.isHidden = false
-                    self.containerView.isHidden = true
-                    self.shouldSendToSettings = true
-                    print("unknown")
-                }
-            }
-        })
-    }
-    
     @objc func dueDateChanged(sender:UIDatePicker){
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .full
@@ -253,9 +218,32 @@ class ReminderViewController: UIViewController {
         }))
         self.present(alert, animated: true, completion: nil)
     }
-
+    
     //MARK: Notification
-    @objc func registerLocal() {
+    func checkIfRegistered() {
+        localNotificationManager.checkIfRegistered { permission in
+            DispatchQueue.main.async {
+                switch permission {
+                case .authorized:
+                    self.registerNotificationButton.isHidden = true
+                    self.containerView.isHidden = false
+                case .denied:
+                    self.registerNotificationButton.isHidden = false
+                    self.containerView.isHidden = true
+                    self.shouldSendToSettings = true
+                case .notAsked:
+                    self.registerNotificationButton.isHidden = false
+                    self.containerView.isHidden = true
+                case .unknown:
+                    self.registerNotificationButton.isHidden = false
+                    self.containerView.isHidden = true
+                    self.shouldSendToSettings = true
+                }
+            }
+        }
+    }
+    
+    @objc func registerLocalNotification() {
         guard !shouldSendToSettings else {
             if let bundleIdentifier = Bundle.main.bundleIdentifier, let appSettings = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
                 if UIApplication.shared.canOpenURL(appSettings) {
@@ -265,8 +253,7 @@ class ReminderViewController: UIViewController {
             return
         }
         // Ask for permission
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+        localNotificationManager.registerLocal { (granted, error) in
             guard error == nil else {
                 print("error \(error.debugDescription)")
                 return
@@ -280,18 +267,7 @@ class ReminderViewController: UIViewController {
         }
     }
     
-    @objc func scheduleLocal(title: String, body: String, id: String, date: Date, repeats: Bool = false) {
-        let center = UNUserNotificationCenter.current()
-        
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.sound = UNNotificationSound.default
-        
-        let units: Set<Calendar.Component> = [.minute, .hour, .day, .month, .year]
-        let dateComponents = Calendar.current.dateComponents(units, from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-        center.add(request)
+    @objc func scheduleLocal(title: String, body: String, id: String, date: Date) {
+        localNotificationManager.schedule(title: title, body: body, id: id, date: date)
     }
 }
